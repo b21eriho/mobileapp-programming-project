@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         int id = item.getItemId();
 
         if (id == R.id.action_refresh_list) {
-            return true;
+            new JsonTask(this).execute(JSON_URL);
         }
 
         if (id == R.id.action_show_about) {
