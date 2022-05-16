@@ -39,7 +39,7 @@ public class Day {
         String[] sunUpShort = sunUp.split(":");
         String[] sunDownShort = sunDown.split(":");
 
-        String returner = sunUpShort + "-" + sunDownShort;
+        String returner = sunUpShort[0] + "-" + sunDownShort[0];
 
         return returner;
     }
