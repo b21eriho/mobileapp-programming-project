@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         Type type = new TypeToken<List<Day>>() {}.getType();
         List<Day> daysFromJson = gson.fromJson(json, type);
 
+        dayList.clear();
         dayList.addAll(daysFromJson);
         adapter.notifyDataSetChanged();
     }
