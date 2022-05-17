@@ -29,7 +29,7 @@ public class DayRecyclerViewAdapter extends RecyclerView.Adapter<DayRecyclerView
     public void onBindViewHolder(@NonNull DayViewHolder holder, int position) {
         Day thisDay = days.get(position);
 
-        if(thisDay.getName() != null){
+        if(thisDay.getName().length() != 0){
             holder.dayTitle.setText(thisDay.getName());
         }
         else{
@@ -37,19 +37,19 @@ public class DayRecyclerViewAdapter extends RecyclerView.Adapter<DayRecyclerView
 
             switch (thisDay.getDate() % 5){
                 case 0:
-                    tmp += "Monday the ";
+                    tmp += "Sunday the ";
                     break;
                 case 1:
-                    tmp += "Tuesday the ";
+                    tmp += "Monday the ";
                     break;
                 case 2:
-                    tmp += "Wednesday the ";
+                    tmp += "Tuesday the ";
                     break;
                 case 3:
-                    tmp += "Friday  the ";
+                    tmp += "Wednesday  the ";
                     break;
                 case 4:
-                    tmp += "Sunday the ";
+                    tmp += "Friday the ";
                     break;
             }
 
