@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        new JsonTask(this).execute(JSON_URL);
         return true;
     }
 
@@ -73,9 +72,6 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
 
     @Override
     public void onPostExecute(String json) {
-
-        Log.d("==>", json);
-
         Type type = new TypeToken<List<Day>>() {}.getType();
         List<Day> daysFromJson = gson.fromJson(json, type);
 
