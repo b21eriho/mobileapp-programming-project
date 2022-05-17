@@ -15,6 +15,10 @@ public class DayRecyclerViewAdapter extends RecyclerView.Adapter<DayRecyclerView
 
     private List<Day> days;
 
+    public DayRecyclerViewAdapter(List<Day> days) {
+        this.days = days;
+    }
+
     @NonNull
     @Override
     public DayViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

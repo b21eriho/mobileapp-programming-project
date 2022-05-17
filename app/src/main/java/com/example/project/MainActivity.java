@@ -8,10 +8,25 @@ import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements JsonTask.JsonTaskListener {
 
     private final String JSON_URL = "https://mobprog.webug.se/json-api?login=b21eriho";
+
+    private RecyclerView dayRecyclerView;
+    private DayRecyclerViewAdapter adapter;
+    private List<Day> dayList;
+
+    private Gson gson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +34,14 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        gson = new Gson();
+        dayList = new ArrayList<Day>();
+        dayRecyclerView = findViewById(R.id.recycler_view);
+        adapter = new DayRecyclerViewAdapter(dayList);
+        dayRecyclerView.setAdapter(adapter);
+        dayRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        new JsonTask(MainActivity.this).execute(JSON_URL);
     }
 
     @Override
@@ -46,6 +69,13 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
 
     @Override
     public void onPostExecute(String json) {
+
         Log.d("==>", json);
+
+        Type type = new TypeToken<List<Day>>() {}.getType();
+        List<Day> daysFromJson = gson.fromJson(json, type);
+
+        dayList.addAll(daysFromJson);
+        adapter.notifyDataSetChanged();
     }
 }
