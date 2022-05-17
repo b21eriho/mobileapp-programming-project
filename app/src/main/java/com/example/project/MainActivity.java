@@ -2,6 +2,7 @@ package com.example.project;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -48,6 +49,31 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         new JsonTask(MainActivity.this).execute(JSON_URL);
     }
 
+    public void updateRecyclerView(boolean onlyEventful){
+        String sortQuerryString = "";
+        if(onlyEventful){sortQuerryString += " WHERE " + DataBaseHelper.COLLUMN_EVENTS + " != '[]'";};
+
+        Cursor cursor = db.getReadableDatabase().rawQuery("SELECT * FROM " + DataBaseHelper.TABLE_LIGHTRISE_DAYS + sortQuerryString + " ORDER BY " + DataBaseHelper.COLLUMN_DATE, null, null);
+        List<Day> tmpDays = new ArrayList<>();
+
+        while (cursor.moveToNext()) {
+            Type type = new TypeToken<List<String>>() {}.getType();
+
+            Day day = new Day(
+                    cursor.getInt(cursor.getColumnIndexOrThrow(DataBaseHelper.COLLUMN_DATE)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(DataBaseHelper.COLLUMN_NAME)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(DataBaseHelper.COLLUMN_SUNUP)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(DataBaseHelper.COLLUMN_SUNDOWN)),
+                    gson.<List<String>>fromJson(cursor.getString(cursor.getColumnIndexOrThrow(DataBaseHelper.COLLUMN_EVENTS)), type)
+            );
+            tmpDays.add(day);
+        }
+        cursor.close();
+        dayList.clear();
+        dayList.addAll(tmpDays);
+        adapter.notifyDataSetChanged();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -88,9 +114,6 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
             db.getWritableDatabase().insert(DataBaseHelper.TABLE_LIGHTRISE_DAYS, null, values);
 
         }
-
-        dayList.clear();
-        dayList.addAll(daysFromJson);
-        adapter.notifyDataSetChanged();
+        updateRecyclerView(true); //This hardcoded parameter is temporary
     }
 }
