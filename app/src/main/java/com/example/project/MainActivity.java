@@ -1,5 +1,6 @@
 package com.example.project;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
     private DayRecyclerViewAdapter adapter;
     private List<Day> dayList;
 
+    private DataBaseHelper db;
+
     private Gson gson;
 
     @Override
@@ -35,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        db = new DataBaseHelper(this);
         gson = new Gson();
         dayList = new ArrayList<Day>();
         dayRecyclerView = findViewById(R.id.recycler_view);
@@ -74,6 +78,18 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
 
         Type type = new TypeToken<List<Day>>() {}.getType();
         List<Day> daysFromJson = gson.fromJson(json, type);
+
+        for(int i = 0; i < daysFromJson.size(); i++){
+            Day thisDay = daysFromJson.get(i);
+            ContentValues values = new ContentValues();
+            values.put(DataBaseHelper.COLLUMN_DATE, thisDay.getDate());
+            values.put(DataBaseHelper.COLLUMN_NAME, thisDay.getName());
+            values.put(DataBaseHelper.COLLUMN_SUNUP, thisDay.getSunUp());
+            values.put(DataBaseHelper.COLLUMN_SUNDOWN, thisDay.getSunDown());
+            values.put(DataBaseHelper.COLLUMN_EVENTS, gson.toJson(thisDay.getEvents()));
+            db.getWritableDatabase().insert(DataBaseHelper.TABLE_LIGHTRISE_DAYS, null, values);
+
+        }
 
         dayList.clear();
         dayList.addAll(daysFromJson);
