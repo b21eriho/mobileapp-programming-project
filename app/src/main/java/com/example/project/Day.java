@@ -15,6 +15,14 @@ public class Day {
     @SerializedName("auxdata")
     private List<String> events;
 
+    public Day(int date, String name, String sunUp, String sunDown, List<String> events) {
+        this.date = date;
+        this.name = name;
+        this.sunUp = sunUp;
+        this.sunDown = sunDown;
+        this.events = events;
+    }
+
     public int getDate() {
         return date;
     }
