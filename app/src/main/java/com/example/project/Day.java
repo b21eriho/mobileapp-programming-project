@@ -44,8 +44,7 @@ public class Day {
         return returner;
     }
 
-    @Override
-    public String toString() {
+    public String getFullDate() {
         String returner = "";
 
         returner += date + "";
