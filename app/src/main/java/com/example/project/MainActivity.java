@@ -75,6 +75,8 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         Type type = new TypeToken<List<Day>>() {}.getType();
         List<Day> daysFromJson = gson.fromJson(json, type);
 
+        db.getWritableDatabase().execSQL("DELETE FROM " + DataBaseHelper.TABLE_LIGHTRISE_DAYS);
+
         for(int i = 0; i < daysFromJson.size(); i++){
             Day thisDay = daysFromJson.get(i);
             ContentValues values = new ContentValues();
