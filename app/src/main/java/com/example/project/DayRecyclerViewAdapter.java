@@ -22,7 +22,9 @@ public class DayRecyclerViewAdapter extends RecyclerView.Adapter<DayRecyclerView
     @NonNull
     @Override
     public DayViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new DayViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false));
+        DayViewHolder thisDayHolder = new DayViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false));
+
+        return thisDayHolder;
     }
 
     @Override
