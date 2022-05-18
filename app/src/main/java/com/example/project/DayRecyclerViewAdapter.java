@@ -31,6 +31,7 @@ public class DayRecyclerViewAdapter extends RecyclerView.Adapter<DayRecyclerView
             public void onClick(View v) {
                 RecyclerView recyclerView = (RecyclerView) view.getParent();
                 Intent intent = new Intent(recyclerView.getContext(), DetailedActivity.class);
+                intent.putExtra("POSITION", recyclerView.getChildAdapterPosition(view));
                 recyclerView.getContext().startActivity(intent);
             }
         });
