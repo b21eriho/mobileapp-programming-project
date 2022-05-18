@@ -1,5 +1,7 @@
 package com.example.project;
 
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +24,14 @@ public class DayRecyclerViewAdapter extends RecyclerView.Adapter<DayRecyclerView
     @NonNull
     @Override
     public DayViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        DayViewHolder thisDayHolder = new DayViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false));
-
-        return thisDayHolder;
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("==>", "test");
+            }
+        });
+        return new DayViewHolder(view);
     }
 
     @Override
@@ -87,7 +94,7 @@ public class DayRecyclerViewAdapter extends RecyclerView.Adapter<DayRecyclerView
     @Override
     public int getItemCount() { return days.size(); }
 
-    public class DayViewHolder extends RecyclerView.ViewHolder{
+    public class DayViewHolder extends RecyclerView.ViewHolder {
 
         private TextView dayTitle;
         private TextView sunTime;
