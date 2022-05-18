@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import java.util.concurrent.RecursiveAction;
 
 public class DayRecyclerViewAdapter extends RecyclerView.Adapter<DayRecyclerViewAdapter.DayViewHolder>{
 
@@ -24,11 +25,13 @@ public class DayRecyclerViewAdapter extends RecyclerView.Adapter<DayRecyclerView
     @NonNull
     @Override
     public DayViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("==>", "test");
+                RecyclerView recyclerView = (RecyclerView) view.getParent();
+                Intent intent = new Intent(recyclerView.getContext(), DetailedActivity.class);
+                recyclerView.getContext().startActivity(intent);
             }
         });
         return new DayViewHolder(view);
