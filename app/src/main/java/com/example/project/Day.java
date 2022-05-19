@@ -44,12 +44,7 @@ public class Day {
     }
 
     public String getSunTimesShort(){
-        String[] sunUpShort = sunUp.split(":");
-        String[] sunDownShort = sunDown.split(":");
-
-        String returner = sunUpShort[0] + "-" + sunDownShort[0];
-
-        return returner;
+        return sunUp.split(":")[0];
     }
 
     public String getFullDate() {
