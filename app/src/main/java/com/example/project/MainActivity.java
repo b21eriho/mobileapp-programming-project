@@ -2,11 +2,15 @@ package com.example.project;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Switch;
+import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -30,7 +34,12 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
 
     private DataBaseHelper db;
 
+    private SharedPreferences myPreferenceRef;
+    private SharedPreferences.Editor myPreferenceEditor;
+
     private Gson gson;
+
+    private Switch toggleSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        myPreferenceRef = getSharedPreferences("MyPrefs",MODE_PRIVATE);
+        myPreferenceEditor = myPreferenceRef.edit();
 
         db = new DataBaseHelper(this);
         gson = new Gson();
@@ -47,6 +59,26 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         dayRecyclerView.setAdapter(adapter);
         dayRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         new JsonTask(MainActivity.this).execute(JSON_URL);
+
+        toggleSwitch = findViewById(R.id.eventfullToggle);
+
+        if(myPreferenceRef.getBoolean("onlyEventful", false)){
+            toggleSwitch.setChecked(true);
+        }
+        else{
+            toggleSwitch.setChecked(false);
+            myPreferenceEditor.putBoolean("onlyEventful", false);
+            myPreferenceEditor.apply();
+        }
+
+        toggleSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myPreferenceEditor.putBoolean("onlyEventful", toggleSwitch.isChecked());
+                myPreferenceEditor.apply();
+                updateRecyclerView(myPreferenceRef.getBoolean("onlyEventful", true));
+            }
+        });
     }
 
     public Cursor getDataBaseCursor(boolean onlyEventful){
@@ -119,6 +151,6 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
             db.getWritableDatabase().insert(DataBaseHelper.TABLE_LIGHTRISE_DAYS, null, values);
 
         }
-        updateRecyclerView(true); //This hardcoded parameter is temporary
+        updateRecyclerView(myPreferenceRef.getBoolean("onlyEventful", false));
     }
 }
