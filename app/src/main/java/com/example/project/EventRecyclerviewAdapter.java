@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class EventRecyclerviewAdapter extends RecyclerView.Adapter<EventRecyclerviewAdapter.EventViewHolder>{
-
     private List<String> events;
 
     public EventRecyclerviewAdapter(List<String> events) {
@@ -21,13 +20,13 @@ public class EventRecyclerviewAdapter extends RecyclerView.Adapter<EventRecycler
     @NonNull
     @Override
     public EventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new EventViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.event_list_item, parent, false));
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_list_item, parent, false);
+        return new EventViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
-        String thisEvent = events.get(position);
-        holder.eventName.setText(thisEvent);
+        holder.eventName.setText(events.get(position));
     }
 
     @Override
@@ -36,13 +35,10 @@ public class EventRecyclerviewAdapter extends RecyclerView.Adapter<EventRecycler
     }
 
     public class EventViewHolder extends RecyclerView.ViewHolder{
-
         private TextView eventName;
-
         public EventViewHolder(@NonNull View itemView) {
             super(itemView);
             eventName = itemView.findViewById(R.id.event_title);;
         }
     }
-
 }
