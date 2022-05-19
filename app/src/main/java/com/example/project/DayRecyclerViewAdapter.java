@@ -1,6 +1,8 @@
 package com.example.project;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+
+import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.RecursiveAction;
 
@@ -17,6 +22,8 @@ public class DayRecyclerViewAdapter extends RecyclerView.Adapter<DayRecyclerView
 
 
     private List<Day> days;
+
+    private DataBaseHelper db;
 
     public DayRecyclerViewAdapter(List<Day> days) {
         this.days = days;
@@ -26,12 +33,37 @@ public class DayRecyclerViewAdapter extends RecyclerView.Adapter<DayRecyclerView
     @Override
     public DayViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 RecyclerView recyclerView = (RecyclerView) view.getParent();
+                db = new DataBaseHelper(recyclerView.getContext());
+                Gson gson = new Gson();
+
+                String sortQuerryString = "";
+                if(true){sortQuerryString += " WHERE " + DataBaseHelper.COLLUMN_EVENTS + " != '[]'";};
+
+                Cursor cursor = db.getReadableDatabase().rawQuery("SELECT * FROM " + DataBaseHelper.TABLE_LIGHTRISE_DAYS + sortQuerryString + " ORDER BY " + DataBaseHelper.COLLUMN_DATE, null, null);
+                cursor.moveToPosition(recyclerView.getChildAdapterPosition(view));
+
                 Intent intent = new Intent(recyclerView.getContext(), DetailedActivity.class);
-                intent.putExtra("POSITION", recyclerView.getChildAdapterPosition(view));
+
+                Log.d("==>", cursor.getString(cursor.getColumnIndexOrThrow(DataBaseHelper.COLLUMN_NAME)));
+                if(cursor.getString(cursor.getColumnIndexOrThrow(DataBaseHelper.COLLUMN_NAME)).length() == 0){
+                    intent.putExtra("DAY_NAME", DayNameHelper.getNameFromDate(cursor.getInt(cursor.getColumnIndexOrThrow(DataBaseHelper.COLLUMN_DATE))));
+                } else{
+                    intent.putExtra("DAY_NAME", cursor.getString(cursor.getColumnIndexOrThrow(DataBaseHelper.COLLUMN_NAME)));
+                }
+
+                intent.putExtra("DAY_DATE", "Date: " + DayNameHelper.getFullDateFromDate(cursor.getInt(cursor.getColumnIndexOrThrow(DataBaseHelper.COLLUMN_DATE))));
+
+                intent.putExtra("DAY_SUNUP", "Sunrise: " + cursor.getString(cursor.getColumnIndexOrThrow(DataBaseHelper.COLLUMN_SUNUP)));
+
+                intent.putExtra("DAY_SUNDOWN", "Sunset: " + cursor.getString(cursor.getColumnIndexOrThrow(DataBaseHelper.COLLUMN_SUNDOWN)));
+
+                intent.putExtra("DAY_EVENTS", cursor.getString(cursor.getColumnIndexOrThrow(DataBaseHelper.COLLUMN_EVENTS)));
+
                 recyclerView.getContext().startActivity(intent);
             }
         });
@@ -46,44 +78,7 @@ public class DayRecyclerViewAdapter extends RecyclerView.Adapter<DayRecyclerView
             holder.dayTitle.setText(thisDay.getName());
         }
         else{
-            String tmp = "";
-
-            switch (thisDay.getDate() % 5){
-                case 0:
-                    tmp += "Sunday the ";
-                    break;
-                case 1:
-                    tmp += "Monday the ";
-                    break;
-                case 2:
-                    tmp += "Tuesday the ";
-                    break;
-                case 3:
-                    tmp += "Wednesday  the ";
-                    break;
-                case 4:
-                    tmp += "Friday the ";
-                    break;
-            }
-
-            tmp += thisDay.getDate() + "";
-
-            switch (thisDay.getDate()){
-                case 1:
-                    tmp += "st ";
-                    break;
-                case 2:
-                    tmp += "nd ";
-                    break;
-                case 3:
-                    tmp += "rd ";
-                    break;
-                default:
-                    tmp += "th ";
-                    break;
-            }
-
-            holder.dayTitle.setText(tmp);
+            holder.dayTitle.setText(DayNameHelper.getNameFromDate(thisDay.getDate()));
         }
 
         holder.sunTime.setText("Sun: " + thisDay.getSunTimesShort());
