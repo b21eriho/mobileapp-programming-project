@@ -49,11 +49,16 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         new JsonTask(MainActivity.this).execute(JSON_URL);
     }
 
-    public void updateRecyclerView(boolean onlyEventful){
+    public Cursor getDataBaseCursor(boolean onlyEventful){
         String sortQuerryString = "";
         if(onlyEventful){sortQuerryString += " WHERE " + DataBaseHelper.COLLUMN_EVENTS + " != '[]'";};
 
         Cursor cursor = db.getReadableDatabase().rawQuery("SELECT * FROM " + DataBaseHelper.TABLE_LIGHTRISE_DAYS + sortQuerryString + " ORDER BY " + DataBaseHelper.COLLUMN_DATE, null, null);
+        return cursor;
+    }
+
+    public void updateRecyclerView(boolean onlyEventful){
+        Cursor cursor = getDataBaseCursor(onlyEventful);
         List<Day> tmpDays = new ArrayList<>();
 
         while (cursor.moveToNext()) {
