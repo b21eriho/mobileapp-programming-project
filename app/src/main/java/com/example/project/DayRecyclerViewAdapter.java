@@ -1,8 +1,10 @@
 package com.example.project;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +16,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 
-import java.io.Serializable;
 import java.util.List;
-import java.util.concurrent.RecursiveAction;
 
 public class DayRecyclerViewAdapter extends RecyclerView.Adapter<DayRecyclerViewAdapter.DayViewHolder>{
 
+    private SharedPreferences myPreferenceRef;
+    private SharedPreferences.Editor myPreferenceEditor;
 
     private List<Day> days;
 
@@ -27,6 +29,7 @@ public class DayRecyclerViewAdapter extends RecyclerView.Adapter<DayRecyclerView
 
     public DayRecyclerViewAdapter(List<Day> days) {
         this.days = days;
+
     }
 
     @NonNull
@@ -41,8 +44,11 @@ public class DayRecyclerViewAdapter extends RecyclerView.Adapter<DayRecyclerView
                 db = new DataBaseHelper(recyclerView.getContext());
                 Gson gson = new Gson();
 
+                myPreferenceRef = recyclerView.getContext().getSharedPreferences("MyPrefs",MODE_PRIVATE);
+                myPreferenceEditor = myPreferenceRef.edit();
+
                 String sortQuerryString = "";
-                if(true){sortQuerryString += " WHERE " + DataBaseHelper.COLLUMN_EVENTS + " != '[]'";};
+                if(myPreferenceRef.getBoolean("onlyEventful", false)){sortQuerryString += " WHERE " + DataBaseHelper.COLLUMN_EVENTS + " != '[]'";};
 
                 Cursor cursor = db.getReadableDatabase().rawQuery("SELECT * FROM " + DataBaseHelper.TABLE_LIGHTRISE_DAYS + sortQuerryString + " ORDER BY " + DataBaseHelper.COLLUMN_DATE, null, null);
                 cursor.moveToPosition(recyclerView.getChildAdapterPosition(view));
