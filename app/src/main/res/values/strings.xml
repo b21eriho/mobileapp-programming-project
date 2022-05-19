@@ -2,4 +2,5 @@
     <string name="app_name">Lightrise Calendar</string>
     <string name="refresh_list">Refresh list</string>
     <string name="about">About</string>
+    <string name="about_info">This app\'s main purpose is to exemplify and inform of a few selected attributes of 25 of the 150 total days in the Bergain year. \n\nDue to this the app is only useful for a user who has interest in this particualar fictional world. Further it is only helpful when one needs or wants information on this singular month.</string>
 </resources>
