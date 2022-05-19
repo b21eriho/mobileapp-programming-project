@@ -87,7 +87,7 @@ public class DayRecyclerViewAdapter extends RecyclerView.Adapter<DayRecyclerView
             holder.dayTitle.setText(DayNameHelper.getNameFromDate(thisDay.getDate()));
         }
 
-        holder.sunTime.setText("Sun: " + thisDay.getSunTimesShort());
+        holder.sunTime.setText("Sunrise: " + thisDay.getSunTimesShort());
 
         String tmp = "";
         tmp += thisDay.getEvents().size() + " event";
