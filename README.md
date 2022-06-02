@@ -16,23 +16,17 @@ unique day-name the day should say which weekday and date the day is. Further on
 for activating or deactivating a filter which shows only the days that have at least one event. On the toolbar there should also be an icon
 of buttons that when clicked opens a window from which it can be chosen to show the about-screen or to reload the list from the webservice.
 
+The about-screen should have the header "about" and should then show a brief text explaining that the app is indeed only interesting for
+a person with interest in this particular month of this particular world and it's events.
 
+The detailed screen that will appear when a list-item is clicked should prominently show the name of the day, following the same conventions
+discussed earlier. The date of the day should also be displayed as well as the full time that the sun sets and rises. Lastly it should show a
+list of the names of all the events that occur on that specific day.
 ![](MobProg%20sketch.png)
 ### Webservice - JSON
 
-
-
 ### Implementation
-
-
 
 ### Implementation VG
 
-
-
 ### Reflection
-
-
-
-
-![](android.png)
