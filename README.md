@@ -10,6 +10,12 @@ This thing in this case is naturally a day. Further there should be a type of fi
 Further there should be a screen that displays information about for who the app is useful. Lastly every list-item should be clickable at which
 point a new screen with more information of the said item should be shown.
 
+In this case the design was designed as follows (See also sketch below). On the main screen there should be a list of days where each list-item
+should show the name of the day, the hour at which the sun rises as well as the amount of events on that day. If the said day does not have a
+unique day-name the day should say which weekday and date the day is. Further on the main screen there should, in the top toolbar, a switch
+for activating or deactivating a filter which shows only the days that have at least one event. On the toolbar there should also be an icon
+of buttons that when clicked opens a window from which it can be chosen to show the about-screen or to reload the list from the webservice.
+
 
 ![](MobProg%20sketch.png)
 ### Webservice - JSON
