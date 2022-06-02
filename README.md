@@ -1,7 +1,22 @@
-
 # Report
 
+### Sketch/design
 
+
+
+### Webservice - JSON
+
+
+
+### Implementation
+
+
+
+### Implementation VG
+
+
+
+### Reflection
 
 ```
 function errorCallback(error) {
