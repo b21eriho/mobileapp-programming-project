@@ -24,7 +24,32 @@ discussed earlier. The date of the day should also be displayed as well as the f
 list of the names of all the events that occur on that specific day.
 ![](MobProg%20sketch.png)
 ### Webservice - JSON
+The JSON-data used in the course was entered according to the course standard but naturally the different fields were used for things relevant
+to this app. ID and type (often called login in the course material) were said not to be needed to be explained and thus they will not be.
 
+Name was used to store the name of the day if it had a unique name, otherwise the field would be left empty. This was quite natural seeing as
+the name was similar to the usage and thus could keep its name in deserialized form.
+Company was used to store the time of sunset, this being a string could have become an issue but seeing as the app would not need to perform any
+math on this data a string was not an issue. Location was used to store the time of sunrise, this too is a string but is not an issue for the
+same reason as above. Both these rows used the format hour:minute to store the time. Size being an integer was naturally used to store the date
+of the day. Auxdata was used to store an array of string with the names of the events on that given day. Notable is the fact that if the
+deserialization (in this case gson) tries to convert an empty field to an array it will cause an error. Due to this even the days without
+events has the string "[]" as to instead be converted to an empty array. Remaining fields were not used.
+
+Below the data for the first day of the month is exemplified in prettyfied JSON.
+```
+{
+	"ID": "b21eriho_d1",
+	"name": "Spring solstice day",
+	"type": "b21eriho",
+	"company": "18:00",
+	"location": "6:00",
+	"category": "",
+	"size": 1,
+	"cost": 0,
+	"auxdata": ["Spring-start feast"]
+}
+```
 ### Implementation
 
 ### Implementation VG
