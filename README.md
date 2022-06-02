@@ -34,7 +34,7 @@ math on this data a string was not an issue. Location was used to store the time
 same reason as above. Both these rows used the format hour:minute to store the time. Size being an integer was naturally used to store the date
 of the day. Auxdata was used to store an array of string with the names of the events on that given day. Notable is the fact that if the
 deserialization (in this case gson) tries to convert an empty field to an array it will cause an error. Due to this even the days without
-events has the string "[]" as to instead be converted to an empty array. Remaining fields were not used.
+events has the data [] as to instead be converted to an empty array. Remaining fields were not used.
 
 Below the data for the first day of the month is exemplified in prettyfied JSON.
 ```
@@ -51,7 +51,40 @@ Below the data for the first day of the month is exemplified in prettyfied JSON.
 }
 ```
 ### Implementation
+#### 1
+One notable part of the project was the fetching of data from the external database into the program. This was accomplished primarily using the "jsonTask" provided in the
+course. However its implementation in the main activity was to be designed individually. The function returns a string of json which was then deserialized using gson.
+To do this a token was made and the instances of the day given by gson was put in an array to be used shortly thereafter. At first this was only done by adding the array
+to the array used by the recyclerview and the adapter alerted to the change 
+([visible here](https://github.com/b21eriho/mobileapp-programming-project/commit/fb6d575e27b70c7f5daed131125894e9208465af)). But later it was also written to the internal
+database for easier access and filtering later, this was done in
+[this](https://github.com/b21eriho/mobileapp-programming-project/commit/d67cba02101cf68b382cf63a5fac3411457a4a43) commit. Code from the latest iteration of this code is
+seen below (Figure 1) as well as a screenshot of the app. While it is hard to prove the data in the image is taken from the web besides showing that no day is 
+hard-coded into the project this image is seen to best show this part of the implementation.
 
+Figure 1 - excerpt from onPostExecute
+```
+        Type type = new TypeToken<List<Day>>() {}.getType();
+        List<Day> daysFromJson = gson.fromJson(json, type);
+
+        db.getWritableDatabase().execSQL("DELETE FROM " + DataBaseHelper.TABLE_LIGHTRISE_DAYS);
+
+        for(int i = 0; i < daysFromJson.size(); i++){
+            Day thisDay = daysFromJson.get(i);
+            ContentValues values = new ContentValues();
+            values.put(DataBaseHelper.COLLUMN_DATE, thisDay.getDate());
+            values.put(DataBaseHelper.COLLUMN_NAME, thisDay.getName());
+            values.put(DataBaseHelper.COLLUMN_SUNUP, thisDay.getSunUp());
+            values.put(DataBaseHelper.COLLUMN_SUNDOWN, thisDay.getSunDown());
+            values.put(DataBaseHelper.COLLUMN_EVENTS, gson.toJson(thisDay.getEvents()));
+            db.getWritableDatabase().insert(DataBaseHelper.TABLE_LIGHTRISE_DAYS, null, values);
+
+        }
+```
+![](Unfiltered.png)
+
+[First implementation of loading json data class form](https://github.com/b21eriho/mobileapp-programming-project/commit/fb6d575e27b70c7f5daed131125894e9208465af)
+[Second implementation, load from class form into database](https://github.com/b21eriho/mobileapp-programming-project/commit/d67cba02101cf68b382cf63a5fac3411457a4a43)
 ### Implementation VG
 
 ### Reflection
