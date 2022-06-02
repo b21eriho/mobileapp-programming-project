@@ -51,7 +51,7 @@ Below the data for the first day of the month is exemplified in prettyfied JSON.
 }
 ```
 ### Implementation
-#### 1
+#### Detail 1
 One notable part of the project was the fetching of data from the external database into the program. This was accomplished primarily using the "jsonTask" provided in the
 course. However its implementation in the main activity was to be designed individually. The function returns a string of json which was then deserialized using gson.
 To do this a token was made and the instances of the day given by gson was put in an array to be used shortly thereafter. At first this was only done by adding the array
@@ -82,9 +82,39 @@ Figure 1 - excerpt from onPostExecute
         }
 ```
 ![](Unfiltered.png)
+#### Detail 2
+Also of note is a feature which was added that allowed the user to refresh the data from the database, this was done mostly in case there would be new items added to the
+external database during the presentation. In either case this was added on the toolbar in the same way an identical effect was made in the "webview"-dugga. The adding of
+the options-icon on the toolbar was done in [this](https://github.com/b21eriho/mobileapp-programming-project/commit/f0b6fee7c6763ca48b03c2f4cf26b174d41227c5) commit. The
+relevant part for this detail is the code which actually reloads the data from the database, seen below in figure 2. This is done in the function which is called whenever
+an item is clicked in the list which the options-icon produces. This function does a few things, among them getting which item was clicked on as to run the right code in
+response, but when the "reload"-button is hit the json-task is ran again which due to the implementation of onPostExecute clears the database and then loads it again from
+the database. This implementation is shown in figure 3 below. As well as these code-excerpts there is a screenshot showing the options-icon's list.
 
-[First implementation of loading json data class form](https://github.com/b21eriho/mobileapp-programming-project/commit/fb6d575e27b70c7f5daed131125894e9208465af)
-[Second implementation, load from class form into database](https://github.com/b21eriho/mobileapp-programming-project/commit/d67cba02101cf68b382cf63a5fac3411457a4a43)
+Figure 2 - function called when item is clicked in options-menu
+```
+public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_refresh_list) {
+            new JsonTask(this).execute(JSON_URL);
+        }
+
+        if (id == R.id.action_show_about) {
+            Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+```
+Figure 3 - excerpt from the updateRecyclerView function which is called in onPostExecute
+```
+dayList.clear();
+dayList.addAll(tmpDays);
+adapter.notifyDataSetChanged();
+```
+![](OptionsOpen.png)
 ### Implementation VG
 
 ### Reflection
