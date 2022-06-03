@@ -175,7 +175,7 @@ Figure 5 - Recyclerview adapter for list-item
     }
 ```
 ![](Unfiltered.png)
-#### Detail 4 filter
+#### Detail 4
 Another interesting part of the app was the filtering of the entries. This was done using a switch-view on the main activity, XML shown below in
 figure 6, which was implemented in [this](https://github.com/b21eriho/mobileapp-programming-project/commit/f0b6fee7c6763ca48b03c2f4cf26b174d41227c5) commit. The 
 functionality of this sorting was implemented such that when the recyclerview was updated it would, if the switch was on, only fetch the day-entries where the auxdata
@@ -212,3 +212,9 @@ public void onClick(View v) {
 ```
 ![](Filtered.png)
 ### Reflection
+Overall, this app-making process was very enjoyable and given my aim for VG it was adequately challenging. The course taught mos tof what was
+needed for this project which was very nice as I could instead focus on the interesting details that were left. Among these were the onClickListener
+for the list-items. Also below are the sceenshots from the about-page and detailed view as they weren't touched upon in the report itself but
+are still reasoned to be good to show.
+![](About.png)
+![](Detailed.png)
