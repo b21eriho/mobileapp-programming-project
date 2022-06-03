@@ -93,7 +93,7 @@ the database. This implementation is shown in figure 3 below. As well as these c
 
 Figure 2 - function called when item is clicked in options-menu
 ```
-public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         if (id == R.id.action_refresh_list) {
@@ -116,5 +116,65 @@ adapter.notifyDataSetChanged();
 ```
 ![](OptionsOpen.png)
 ### Implementation VG
+#### Detail 3
+Also of note and relevant to the recyclerview is the design of each list-item. This was done in accordance to the requirements for the higher grade. The design was made in
+an XML-document in [this](https://github.com/b21eriho/mobileapp-programming-project/commit/dae25528db2b5c6eb9eed14b69ef8bf0ff8c6375) commit also shown below in figure 4.
+To fill this data at runtime an adapter was naturally used in accordance to the way taught in the course by loading data from an instance of the day object into the
+different fields of the list-item. Below is also an image showing these list-items, though it has been shown before.
+
+Figure 4 - XML to design list-item
+```
+    <TextView
+        android:id="@+id/listItemTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center_horizontal"
+        android:text="Title"
+        android:textSize="30sp"/>
+
+    <TextView
+        android:id="@+id/sunTimeDisplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:text="Sun: 8-12"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/listItemTitle" />
+
+    <TextView
+        android:id="@+id/eventAmountDisplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listItemTitle"
+        android:text="2 Events"
+        android:layout_marginEnd="30dp"
+        android:textSize="16sp"/>
+```
+Figure 5 - Recyclerview adapter for list-item
+```
+    public void onBindViewHolder(@NonNull DayViewHolder holder, int position) {
+        Day thisDay = days.get(position);
+
+        if(thisDay.getName().length() != 0){
+            holder.dayTitle.setText(thisDay.getName());
+        }
+        else{
+            holder.dayTitle.setText(DayNameHelper.getNameFromDate(thisDay.getDate()));
+        }
+
+        holder.sunTime.setText("Sunrise: " + thisDay.getSunTimesShort());
+
+        String tmp = "";
+        tmp += thisDay.getEvents().size() + " event";
+        if(thisDay.getEvents().size() != 1){ tmp += "s";}
+        holder.nrEvents.setText(tmp);
+
+    }
+```
+![](Unfiltered.png)
+#### Detail 4 filter
 
 ### Reflection
