@@ -1,4 +1,8 @@
 # Report
+Note: I was told the code should be done by friday the 27th of May but that the report could be turned in the third of June. I presumed
+this meant that I shouldn't change the code past that date and as such I have not, which explains the few spelling mistakes and remaining
+logs left in the code. I hope this was correct.
+
 The app was decided to be usable as a calendar for a fictional world of my own creation. Specifically for one of the world months.
 This month has 25 days and notably the amount of daylight goes from 12 hours on the first of the month and on the last and 25th the sun does
 not set at all. Thus the app should display the time of sunset and sunrise. Additionally some days have specific names that it is called in
