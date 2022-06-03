@@ -176,5 +176,39 @@ Figure 5 - Recyclerview adapter for list-item
 ```
 ![](Unfiltered.png)
 #### Detail 4 filter
+Another interesting part of the app was the filtering of the entries. This was done using a switch-view on the main activity, XML shown below in
+figure 6, which was implemented in [this](https://github.com/b21eriho/mobileapp-programming-project/commit/f0b6fee7c6763ca48b03c2f4cf26b174d41227c5) commit. The 
+functionality of this sorting was implemented such that when the recyclerview was updated it would, if the switch was on, only fetch the day-entries where the auxdata
+didn't consist of only an empty array from the local database. This code is shown below in figure 7. Further when the switch is clicked the new status of it is stored in
+a shared preference so that it would remain where it should even if the app is closed and reopened, see figure 8 for this code. Also below is a screenshot of the app in a 
+state where the data is filtered.
 
+Figure 6 - Excerpt from activity_main defining the switch
+```
+<Switch
+    android:id="@+id/eventfullToggle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Only Eventful"
+    android:layout_gravity="end"/>
+```
+Figure 7 - Excerpt from MainActivity of function that returns a cursor of the data that should be loaded, boolean parameter is weather only eventful days should be loaded
+```
+public Cursor getDataBaseCursor(boolean onlyEventful){
+    String sortQuerryString = "";
+    if(onlyEventful){sortQuerryString += " WHERE " + DataBaseHelper.COLLUMN_EVENTS + " != '[]'";};
+
+    Cursor cursor = db.getReadableDatabase().rawQuery("SELECT * FROM " + DataBaseHelper.TABLE_LIGHTRISE_DAYS + sortQuerryString + " ORDER BY " + DataBaseHelper.COLLUMN_DATE, null, null);
+    return cursor;
+}
+```
+Figure 8 - onClickListener for switch
+```
+public void onClick(View v) {
+    myPreferenceEditor.putBoolean("onlyEventful", toggleSwitch.isChecked());
+    myPreferenceEditor.apply();
+    updateRecyclerView(myPreferenceRef.getBoolean("onlyEventful", true));
+}
+```
+![](Filtered.png)
 ### Reflection
